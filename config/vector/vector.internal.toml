@@ -1,0 +1,11 @@
+# Set global options
+data_dir = "/var/lib/vector"
+
+[sources.vector_metrics]
+type = "internal_metrics"
+
+[sinks.humio_json]
+endpoint = "http://host.docker.internal:8080"
+inputs = ["vector_metrics"]
+token = "30c0ee75-205f-47e6-a071-1d81e64c2c32"
+type = "humio_metrics"

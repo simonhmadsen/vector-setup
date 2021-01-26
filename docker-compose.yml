@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  nginx:
+    container_name: nginx
+    image: nginx
+    ports:
+      - "8081:80"
+    volumes:
+      - ./data/nginx:/var/log/nginx
+      - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./config/nginx/nginx.apm.conf:/etc/nginx/nginx.conf
+      # - ./config/nginx/nginx.combined.conf:/etc/nginx/nginx.conf
+  vector:
+    container_name: vector
+    network_mode: host
+    image: timberio/vector:nightly-alpine
+    volumes:
+      # - ./sample-data:/var/log/sample
+      - ./data/vector:/var/lib/vector
+      - ./config/vector/vector.internal.toml:/etc/vector/vector.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock/:ro
+      # - ./data/nginx:/var/log/nginx
+
+volumes:
+  vector:

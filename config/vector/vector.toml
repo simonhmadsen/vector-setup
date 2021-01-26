@@ -1,0 +1,50 @@
+# Set global options
+data_dir = "/var/lib/vector"
+
+[sources.my_docker_source]
+include_containers = ["vector"] # optional, no default       
+type = "docker" # required
+
+# [sources.my_nginx_source]
+# # General
+# ignore_older = 86400 # optional, no default, seconds
+# include = ["/var/log/nginx/*.log"] # required               
+# start_at_beginning = false # optional, default
+# type = "file" # required
+
+# # Priority
+# oldest_first = false # optional, default
+
+# humio sink: https://vector.dev/docs/reference/sinks/humio_logs/
+# [sinks.humio_kv]
+# set type to "humio" in version 0.8.0
+# https://github.com/timberio/vector/issues/1971
+# encoding.codec = "json" # optional, possible values = json, text, default = json
+# host = "http://host.docker.internal:8080" 
+# inputs = ["my_nginx_source"] 
+# token = "909b45b4-03b3-454a-94fd-a8a4c6ce7ead" 
+# type = "humio_logs" 
+
+# humio sink: https://vector.dev/docs/reference/sinks/humio_logs/
+[sinks.humio_json]
+# set type to "humio" in version 0.8.0
+# https://github.com/timberio/vector/issues/1971
+encoding.codec = "json" # optional, possible values = json, text, default = json
+host = "http://host.docker.internal:8080" 
+inputs = ["my_docker_source"] 
+token = "0657f198-2133-4f8e-b5c5-1184364620cb" 
+type = "humio_logs" 
+
+# [sources.vector-internal]
+# ignore_older = 86400 # optional, no default, seconds
+# include = ["/var/log/sample/*.json"] # required                    
+# start_at_beginning = false # optional, default
+# type = "file" # required
+# type = "journald" # required
+# include_units = ["vector"]
+# current_boot_only = true
+# [sinks.vector-humio]
+# host = "http://host.docker.internal:8080"
+# inputs = ["vector-internal"]
+# token = "0657f198-2133-4f8e-b5c5-1184364620cb"
+# type = "humio_logs"
